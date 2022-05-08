@@ -10,6 +10,7 @@ import {
 import { Theme, CSSObject } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import AddIcon from '@mui/icons-material/Add';
 import { getFaviconUrl } from '@/utils';
 import { Site } from '@/types';
 import { SiteButton } from '../Elements';
@@ -98,6 +99,37 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
         {list.map((item) => (
           <SiteButton {...item} expand={open} />
         ))}
+        <ListItem
+          disablePadding
+          sx={{
+            display: 'flex',
+          }}
+        >
+          <ListItemButton
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              px: 0,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                width: MINI_WIDTH,
+              }}
+            >
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Add"
+              sx={{
+                whiteSpace: 'nowrap',
+              }}
+            />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );
