@@ -1,4 +1,4 @@
-import * as path from 'path';
+const path = require('path');
 
 module.exports = {
   env: {
@@ -14,7 +14,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'react-hooks'],
   rules: {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
