@@ -35,7 +35,13 @@ export const SiteButton = ({
               height={32}
             />
           </ListItemIcon>
-          {expand && <ListItemText primary={title} />}
+          <ListItemText
+            primary={title}
+            sx={{
+              whiteSpace: 'nowrap',
+              visibility: expand ? 'inherit' : 'hidden',
+            }}
+          />
         </ListItemButton>
       </ListItem>
     </Tooltip>

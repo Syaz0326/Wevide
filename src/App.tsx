@@ -1,13 +1,15 @@
-import { useState } from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { AppProvider } from '@/provider/app';
 import { MainLayout } from './components/Layout';
 
 function App() {
   return (
-    <MainLayout>
-      <h1>hoge</h1>
-    </MainLayout>
+    <AppProvider>
+      <MainLayout>
+        <h1>hoge</h1>
+      </MainLayout>
+    </AppProvider>
   );
 }
 

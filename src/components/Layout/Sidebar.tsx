@@ -7,11 +7,13 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
+import { Theme, CSSObject } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { getFaviconUrl } from '@/utils';
 import { Site } from '@/types';
 import { SiteButton } from '../Elements';
+import { theme } from '@/provider/Theme';
 
 export const MINI_WIDTH = '64px';
 export const EXPAND_WIDTH = '256px';
@@ -31,6 +33,24 @@ const list: Site[] = [
   },
 ];
 
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: EXPAND_WIDTH,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+  width: MINI_WIDTH,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
 export type SidebarProps = {
   open: boolean;
   onToggleOpen: () => void;
@@ -41,7 +61,9 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
       variant="permanent"
       open={open}
       sx={{
+        ...(open ? openedMixin(theme) : closedMixin(theme)),
         '& .MuiDrawer-paper': {
+          ...(open ? openedMixin(theme) : closedMixin(theme)),
           width: open ? EXPAND_WIDTH : MINI_WIDTH,
         },
       }}
