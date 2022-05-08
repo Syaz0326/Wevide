@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  List,
   ListItem,
   ListItemButton,
   ListItemIcon,
@@ -15,12 +14,7 @@ export type SiteButtonProps = Site & {
   expand: boolean;
 };
 
-export const SiteButton = ({
-  title,
-  src,
-  iconSrc,
-  expand,
-}: SiteButtonProps) => {
+export function SiteButton({ title, src, iconSrc, expand }: SiteButtonProps) {
   return (
     <Tooltip title={title} placement="right">
       <ListItem disableGutters disablePadding>
@@ -53,4 +47,4 @@ export const SiteButton = ({
       </ListItem>
     </Tooltip>
   );
-};
+}

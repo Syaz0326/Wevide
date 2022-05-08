@@ -6,6 +6,6 @@ export const theme = createTheme({});
 export type ThemeProviderProps = {
   children: ReactNode;
 };
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+export function ThemeProvider({ children }: ThemeProviderProps) {
   return <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>;
-};
+}

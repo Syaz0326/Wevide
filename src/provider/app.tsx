@@ -1,10 +1,9 @@
-import React from 'react';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { ThemeProvider } from './Theme';
 
 export type AppProviderProps = {
   children: ReactNode;
 };
-export const AppProvider = ({ children }: AppProviderProps) => {
+export function AppProvider({ children }: AppProviderProps) {
   return <ThemeProvider>{children}</ThemeProvider>;
-};
+}

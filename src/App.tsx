@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import { AppProvider } from '@/provider/app';
 import { MainLayout } from './components/Layout';
