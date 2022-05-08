@@ -5,9 +5,31 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { getFaviconUrl } from '@/utils';
+import { Site } from '@/types';
+import { SiteButton } from '../Elements';
+
+export const MINI_WIDTH = '64px';
+export const EXPAND_WIDTH = '256px';
+
+const list: Site[] = [
+  {
+    title: 'Google',
+    src: new URL('https://www.google.com/'),
+  },
+  {
+    title: 'Yahoo Japan',
+    src: new URL('https://www.yahoo.co.jp/'),
+  },
+  {
+    title: 'Qiita',
+    src: new URL('https://www.qiita.com/'),
+  },
+];
 
 export type SidebarProps = {
   open: boolean;
@@ -20,7 +42,7 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
       open={open}
       sx={{
         '& .MuiDrawer-paper': {
-          width: open ? '256px' : '64px',
+          width: open ? EXPAND_WIDTH : MINI_WIDTH,
         },
       }}
     >
@@ -30,7 +52,7 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: open ? 'flex-start' : 'center',
+            alignItems: open ? 'flex-end' : 'center',
           }}
         >
           <ListItemButton
@@ -51,6 +73,9 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
             </ListItemIcon>
           </ListItemButton>
         </ListItem>
+        {list.map((item) => (
+          <SiteButton {...item} expand={open} />
+        ))}
       </List>
     </Drawer>
   );
