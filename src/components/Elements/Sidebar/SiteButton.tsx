@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { getFaviconUrl } from '@/utils';
 import { Site } from '@/types';
+import { MINI_WIDTH } from '@/components/Layout/Sidebar';
 
 export type SiteButtonProps = Site & {
   expand: boolean;
@@ -27,7 +28,13 @@ export const SiteButton = ({
           disableGutters
           sx={{ display: 'flex', justifyContent: 'center' }}
         >
-          <ListItemIcon sx={{ display: 'flex', justifyContent: 'center' }}>
+          <ListItemIcon
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: MINI_WIDTH,
+            }}
+          >
             <img
               src={iconSrc ?? getFaviconUrl(src.hostname).href}
               alt={title}
