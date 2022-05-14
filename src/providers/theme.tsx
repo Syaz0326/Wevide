@@ -4,7 +4,7 @@ import {
   ThemeProvider as ThemeProviderOriginal,
 } from '@mui/material';
 
-const theme = createTheme();
+export const theme = createTheme();
 
 export type ThemeProviderProps = {
   children: ReactNode;

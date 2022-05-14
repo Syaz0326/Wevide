@@ -7,11 +7,11 @@ import {
   ListItemIcon as ListItemIconOriginal,
   ListItemText,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, CSSObject } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-
 import { getIconUrl } from '@Common/utils/icon';
+import { theme } from '@/providers/theme';
 
 export const SMALL_WIDTH = '64px';
 export const EXPANDED_WIDTH = '240px';
@@ -31,6 +31,23 @@ const ListItemIcon = styled(ListItemIconOriginal)`
   min-width: ${SMALL_WIDTH};
   max-width: ${SMALL_WIDTH};
 `;
+
+const opendMixin: CSSObject = {
+  width: EXPANDED_WIDTH,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowY: 'hidden',
+};
+
+const closedMixin: CSSObject = {
+  width: SMALL_WIDTH,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+};
 
 // Sample
 const Items: {
@@ -57,8 +74,9 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => (
     variant="persistent"
     open
     sx={{
+      ...(open ? opendMixin : closedMixin),
       '& .MuiDrawer-paper': {
-        width: open ? EXPANDED_WIDTH : SMALL_WIDTH,
+        ...(open ? opendMixin : closedMixin),
       },
     }}
   >
