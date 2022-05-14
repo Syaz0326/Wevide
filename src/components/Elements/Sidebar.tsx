@@ -11,6 +11,8 @@ import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
+import { getIconUrl } from '@Common/utils/icon';
+
 export const SMALL_WIDTH = '64px';
 export const EXPANDED_WIDTH = '240px';
 
@@ -30,11 +32,7 @@ const ListItemIcon = styled(ListItemIconOriginal)`
   max-width: ${SMALL_WIDTH};
 `;
 
-const getIconURL = (domain: string, sz: number = 32) => {
-  const IconAPI = new URL('https://www.google.com/s2/favicons');
-  return `${IconAPI.href}?domain=${domain}&sz=${sz}`;
-};
-
+// Sample
 const Items: {
   title: string;
   link: URL;
@@ -105,7 +103,7 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => (
           <ListItemButton>
             <ListItemIcon>
               <img
-                src={item.iconUrl ?? getIconURL(item.link.hostname)}
+                src={item.iconUrl ?? getIconUrl(item.link.hostname)}
                 alt={item.title}
                 width={32}
                 height={32}
