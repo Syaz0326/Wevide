@@ -117,7 +117,7 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => (
         </ListItemButton>
       </ListItem>
       {Items.map((item) => (
-        <ListItem>
+        <ListItem key={item.link.href}>
           <ListItemButton>
             <ListItemIcon>
               <img
