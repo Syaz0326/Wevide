@@ -7,11 +7,14 @@ import {
   ListItemIcon as ListItemIconOriginal,
   ListItemText,
 } from '@mui/material';
+import grey from '@mui/material/colors/grey';
 import { styled, CSSObject } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { getIconUrl } from '@Common/utils/icon';
 import { theme } from '@/providers/theme';
+import { useCurrentContent } from '@/recoil/currentContent';
+import { Content } from '@/../src-common/types';
 
 export const SMALL_WIDTH = '64px';
 export const EXPANDED_WIDTH = '240px';
@@ -50,16 +53,16 @@ const closedMixin: CSSObject = {
 };
 
 // Sample
-const Items: {
-  title: string;
-  link: URL;
-  iconUrl?: string;
-}[] = [
+const Items: Content[] = [
   {
+    id: '1',
+    type: 'SINGLE',
     title: 'Google',
     link: new URL('https://www.google.com'),
   },
   {
+    id: '2',
+    type: 'SINGLE',
     title: 'Yahoo',
     link: new URL('https://www.yahoo.co.jp'),
   },
@@ -69,68 +72,86 @@ export type SidebarProps = {
   open: boolean;
   onToggleOpen: () => void;
 };
-export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => (
-  <Drawer
-    variant="persistent"
-    open
-    sx={{
-      ...(open ? opendMixin : closedMixin),
-      '& .MuiDrawer-paper': {
-        ...(open ? opendMixin : closedMixin),
-      },
-    }}
-  >
-    <List
+export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
+  const [currentContent, setCurrentContent] = useCurrentContent();
+  const handleClick = (content: Content) => () => setCurrentContent(content);
+
+  return (
+    <Drawer
+      variant="persistent"
+      open
       sx={{
-        p: 0,
+        ...(open ? opendMixin : closedMixin),
+        '& .MuiDrawer-paper': {
+          ...(open ? opendMixin : closedMixin),
+        },
       }}
     >
-      <ListItem
-        disablePadding
+      <List
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: open ? 'flex-end' : 'inherit',
+          p: 0,
         }}
       >
-        <ListItemButton
-          onClick={onToggleOpen}
+        <ListItem
+          disablePadding
           sx={{
-            maxWidth: SMALL_WIDTH,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: open ? 'flex-end' : 'inherit',
           }}
         >
-          <ListItemIcon>
-            {open ? (
-              <ChevronLeftIcon
-                sx={{
-                  fontSize: '32px',
-                }}
-              />
-            ) : (
-              <MenuIcon
-                sx={{
-                  fontSize: '32px',
-                }}
-              />
-            )}
-          </ListItemIcon>
-        </ListItemButton>
-      </ListItem>
-      {Items.map((item) => (
-        <ListItem key={item.link.href}>
-          <ListItemButton>
+          <ListItemButton
+            onClick={onToggleOpen}
+            sx={{
+              maxWidth: SMALL_WIDTH,
+            }}
+          >
             <ListItemIcon>
-              <img
-                src={item.iconUrl ?? getIconUrl(item.link.hostname)}
-                alt={item.title}
-                width={32}
-                height={32}
-              />
+              {open ? (
+                <ChevronLeftIcon
+                  sx={{
+                    fontSize: '32px',
+                  }}
+                />
+              ) : (
+                <MenuIcon
+                  sx={{
+                    fontSize: '32px',
+                  }}
+                />
+              )}
             </ListItemIcon>
-            {open && <ListItemText primary={item.title} />}
           </ListItemButton>
         </ListItem>
-      ))}
-    </List>
-  </Drawer>
-);
+        {Items.map((item) => (
+          <ListItem
+            key={item.id}
+            sx={{
+              backgroundColor:
+                item.id === currentContent.id ? grey[300] : 'inherit',
+            }}
+          >
+            <ListItemButton onClick={handleClick(item)}>
+              <ListItemIcon>
+                <img
+                  src={
+                    typeof item.iconUrl === 'string'
+                      ? item.iconUrl
+                      : item.iconUrl?.href ??
+                        (item.type === 'SINGLE'
+                          ? getIconUrl(item.link.hostname)
+                          : getIconUrl(item.link[0].hostname))
+                  }
+                  alt={item.title}
+                  width={32}
+                  height={32}
+                />
+              </ListItemIcon>
+              {open && <ListItemText primary={item.title} />}
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
+  );
+};
