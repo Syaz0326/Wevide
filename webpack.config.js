@@ -12,6 +12,7 @@ module.exports = {
     extensions: ['.js', '.ts'],
     alias: {
       '@': path.resolve(__dirname, './src-electron'),
+      '@Common': path.resolve(__dirname, './src-common'),
     },
   },
   module: {
