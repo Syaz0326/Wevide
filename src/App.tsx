@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import { SingleContent } from './components/Contents/SingleContent';
 import { MainLayout } from './components/Layout';
 import { useGetCurrentContent } from './recoil/currentContent';
 
@@ -8,7 +8,7 @@ function App() {
 
   return (
     <MainLayout>
-      <div className="App">{JSON.stringify(currentContent)}</div>
+      <SingleContent />
     </MainLayout>
   );
 }

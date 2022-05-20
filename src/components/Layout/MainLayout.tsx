@@ -31,6 +31,8 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       <Box
         sx={{
           ...(open ? opendMixin : closedMixin),
+          minHeight: '100vh',
+          minWidth: `calc(100vw - ${open ? EXPANDED_WIDTH : SMALL_WIDTH})`,
         }}
       >
         {children}
