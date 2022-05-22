@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton, SxProps } from '@mui/material';
+import { Box, IconButton, SxProps, TextField } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import HomeIcon from '@mui/icons-material/Home';
 
 export type NavigationBarProps = {
   wv: any;
+  homeUrl: URL;
   sx?: SxProps;
 };
-export const NavigationBar = ({ wv, sx }: NavigationBarProps) => {
+export const NavigationBar = ({ wv, homeUrl, sx }: NavigationBarProps) => {
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
     if (wv.current.addEventListener === undefined) return () => {};
-    const checkCanGoBack = () => setCanGoBack(wv.current.canGoBack());
-    wv.current.addEventListener('did-navigate', checkCanGoBack);
-    wv.current.addEventListener('did-navigate-in-page', checkCanGoBack);
-    const checkCanGoForward = () => setCanGoForward(wv.current.canGoForward());
-    wv.current.addEventListener('did-navigate', checkCanGoForward);
-    wv.current.addEventListener('did-navigate-in-page', checkCanGoForward);
+    const handleDidNavigate = () => {
+      setCanGoBack(wv.current.canGoBack());
+      setCanGoForward(wv.current.canGoForward());
+      setCurrentUrl(wv.current.getURL());
+    };
+    wv.current.addEventListener('did-navigate', handleDidNavigate);
+    wv.current.addEventListener('did-navigate-in-page', handleDidNavigate);
     const cleanup = () => {
-      wv.current.removeEventListener('did-navigate', checkCanGoBack);
-      wv.current.removeEventListener('did-navigate-in-page', checkCanGoBack);
-      wv.current.removeEventListener('did-navigate', checkCanGoForward);
-      wv.current.removeEventListener('did-navigate-in-page', checkCanGoForward);
+      wv.current.removeEventListener('did-navigate', handleDidNavigate);
+      wv.current.removeEventListener('did-navigate-in-page', handleDidNavigate);
     };
     return cleanup;
   }, [wv]);
@@ -38,11 +40,17 @@ export const NavigationBar = ({ wv, sx }: NavigationBarProps) => {
   const handleClickReload = () => {
     wv.current.reloadIgnoringCache();
   };
+  const handleClickHome = () => {
+    wv.current.loadURL(homeUrl.href);
+  };
 
   return (
     <Box
       sx={{
         ...sx,
+        display: 'flex',
+        alignItems: 'center',
+        px: 1,
       }}
     >
       <IconButton onClick={handleClickBack} disabled={!canGoBack}>
@@ -51,9 +59,17 @@ export const NavigationBar = ({ wv, sx }: NavigationBarProps) => {
       <IconButton onClick={handleClickForward} disabled={!canGoForward}>
         <ArrowForwardIcon fontSize="small" />
       </IconButton>
+      <IconButton onClick={handleClickHome}>
+        <HomeIcon fontSize="small" />
+      </IconButton>
       <IconButton onClick={handleClickReload}>
         <RefreshIcon fontSize="small" />
       </IconButton>
+      <TextField
+        sx={{ flexGrow: 1, height: '80%' }}
+        InputProps={{ sx: { height: '100%' } }}
+        value={currentUrl}
+      />
     </Box>
   );
 };

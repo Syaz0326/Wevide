@@ -13,7 +13,7 @@ export const SingleContent = ({ id, url, sx }: SingleContentProps) => {
 
   return (
     <Grid container sx={{ height: '100vh', width: '100%', ...sx }}>
-      <NavigationBar wv={wv} sx={{ height: '36px' }} />
+      <NavigationBar wv={wv} homeUrl={url} sx={{ height: '36px' }} />
       <webview
         ref={wv}
         src={url.href}
