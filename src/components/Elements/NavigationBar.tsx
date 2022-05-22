@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FocusEvent,
+  KeyboardEvent,
+  useEffect,
+  useState,
+} from 'react';
 import { Box, IconButton, SxProps, TextField } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import HomeIcon from '@mui/icons-material/Home';
+import { theme } from '@/providers/theme';
 
 export type NavigationBarProps = {
   wv: any;
@@ -44,6 +51,18 @@ export const NavigationBar = ({ wv, homeUrl, sx }: NavigationBarProps) => {
     wv.current.loadURL(homeUrl.href);
   };
 
+  const handleChangeUrlField = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentUrl(e.target.value);
+  };
+  const handleKeyDownUrlField = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      wv.current.loadURL(currentUrl);
+    }
+  };
+  const handleFocusUrlField = (e: FocusEvent<HTMLInputElement>) => {
+    e.target.select();
+  };
+
   return (
     <Box
       sx={{
@@ -51,6 +70,7 @@ export const NavigationBar = ({ wv, homeUrl, sx }: NavigationBarProps) => {
         display: 'flex',
         alignItems: 'center',
         px: 1,
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <IconButton onClick={handleClickBack} disabled={!canGoBack}>
@@ -69,6 +89,9 @@ export const NavigationBar = ({ wv, homeUrl, sx }: NavigationBarProps) => {
         sx={{ flexGrow: 1, height: '80%' }}
         InputProps={{ sx: { height: '100%' } }}
         value={currentUrl}
+        onChange={handleChangeUrlField}
+        onKeyDown={handleKeyDownUrlField}
+        onFocus={handleFocusUrlField}
       />
     </Box>
   );
