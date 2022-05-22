@@ -9,7 +9,7 @@ import { Content } from '@Common/types';
 const currentContent = atom<Content>({
   key: 'currentContent',
   default: {
-    id: '-999',
+    id: '1',
     type: 'SINGLE',
     title: '',
     link: new URL('https://www.google.com'),

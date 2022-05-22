@@ -1,21 +1,33 @@
-import React from 'react';
-import { Grid } from '@mui/material';
-import { useGetCurrentContent } from '@/recoil/currentContent';
+import React, { useRef } from 'react';
+import { Button, Grid, SxProps } from '@mui/material';
 
-export const SingleContent = () => {
-  const currentContent = useGetCurrentContent();
+export type SingleContentProps = {
+  id: string;
+  url: URL;
+  sx?: SxProps;
+};
+export const SingleContent = ({ id, url, sx }: SingleContentProps) => {
+  const wv = useRef<any>(null);
+  const partition = `persist:${id}`;
 
-  if (currentContent.type === 'MULTI') {
-    return <h1>MultiContents</h1>;
-  }
+  const handleClickBack = () => {
+    wv.current.goBack();
+  };
+  const handleClickForward = () => {
+    wv.current.goForward();
+  };
 
   return (
-    <Grid container sx={{ height: '100vh', width: '100%' }}>
+    <Grid container sx={{ height: '100vh', width: '100%', ...sx }}>
+      <Button onClick={handleClickBack}>戻る</Button>
+      <Button onClick={handleClickForward}>進む</Button>
       <webview
-        src={currentContent.link.href}
+        ref={wv}
+        src={url.href}
         style={{ height: '100vh', width: '100%' }}
         allowpopups
-        webpreferences="nativeWindowOpen=yes,nodeIntegration=no,spellcheck-yes,contextIsolation=no,any=no"
+        webpreferences="nativeWindowOpen=yes,nodeIntegration=no,spellcheck-yes,contextIsolation=no,any=no,webSecurity=no"
+        partition={partition}
       />
     </Grid>
   );
