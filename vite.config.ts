@@ -14,7 +14,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.join(__dirname, 'src/renderer'),
-      '@Common': path.join(__dirname, 'src-common'),
+      '@Common': path.join(__dirname, 'src/common'),
     },
   },
   plugins: [react()],

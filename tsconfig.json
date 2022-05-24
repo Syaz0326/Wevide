@@ -18,7 +18,7 @@
     "baseUrl": "src/renderer",
     "paths": {
       "@/*": ["*"],
-      "@Common/*": ["../../src-common/*"]
+      "@Common/*": ["../common/*"]
     }
   },
   "include": ["src"],
