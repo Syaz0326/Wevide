@@ -13,7 +13,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.join(__dirname, 'src/renderer'),
+      '@Renderer': path.join(__dirname, 'src/renderer'),
       '@Common': path.join(__dirname, 'src/common'),
     },
   },

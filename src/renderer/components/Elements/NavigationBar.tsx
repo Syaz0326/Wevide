@@ -10,7 +10,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import HomeIcon from '@mui/icons-material/Home';
-import { theme } from '@/providers/theme';
+import { theme } from '@Renderer/providers/theme';
 
 export type NavigationBarProps = {
   wv: any;

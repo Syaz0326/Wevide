@@ -12,8 +12,8 @@ import { styled, CSSObject } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { getIconUrl } from '@Common/utils/icon';
-import { theme } from '@/providers/theme';
-import { useCurrentContent } from '@/recoil/currentContent';
+import { theme } from '@Renderer/providers/theme';
+import { useCurrentContent } from '@Renderer/recoil/currentContent';
 import { Content } from '@Common/types';
 
 export const SMALL_WIDTH = '64px';
