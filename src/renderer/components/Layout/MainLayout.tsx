@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import { Box, CSSObject } from '@mui/material';
-import { theme } from '@/providers/theme';
+import { theme } from '@Renderer/providers/theme';
 import { EXPANDED_WIDTH, Sidebar, SMALL_WIDTH } from '../Elements';
 
 const opendMixin: CSSObject = {

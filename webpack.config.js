@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   target: 'electron-main',
-  entry: path.join(__dirname, './src-electron/main.ts'),
+  entry: path.join(__dirname, './src/main/main.ts'),
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist/main'),
@@ -11,16 +11,23 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts'],
     alias: {
-      '@': path.resolve(__dirname, './src-electron'),
-      '@Common': path.resolve(__dirname, './src-common'),
+      '@Main': path.resolve(__dirname, './src/main'),
+      '@Renderer': path.resolve(__dirname, './src/renderer'),
+      '@Common': path.resolve(__dirname, './src/common'),
     },
   },
   module: {
     rules: [
       {
-        test: /src-electron\/\.ts$/,
+        test: /\.ts$/,
+        include: path.resolve(__dirname, 'src', 'main'),
         exclude: /(node_modules)/,
-        loader: 'ts-loader',
+        use: {
+          loader: 'ts-loader',
+          options: {
+            configFile: 'tsconfig.main.json',
+          },
+        },
       },
     ],
   },

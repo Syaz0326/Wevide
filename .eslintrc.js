@@ -42,7 +42,11 @@ module.exports = {
       },
       typescript: {
         alwaysTryTypes: true,
-        project: path.join(__dirname, './tsconfig.json'),
+        project: [
+          path.join(__dirname, './tsconfig.json'),
+          path.join(__dirname, './tsconfig.main.json'),
+          path.join(__dirname, './tsconfig.node.json'),
+        ],
       },
     },
   },

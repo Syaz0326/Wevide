@@ -3,6 +3,8 @@ import { app, BrowserWindow } from 'electron';
 
 const isDelelopment = `${process.env.NODE_ENV}`.trim() === 'development';
 
+console.log({ isDelelopment });
+
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
@@ -15,7 +17,7 @@ const createWindow = () => {
   if (isDelelopment) {
     win.loadURL('http://localhost:3000');
   } else {
-    win.loadFile(path.join(path.join(__dirname, '../renderer/index.html')));
+    win.loadFile(path.join(__dirname, '../renderer/index.html'));
   }
 };
 
