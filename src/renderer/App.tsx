@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Content } from '../src-common/types';
+import { Content } from '@Common/types';
 import { SingleContent } from './components/Contents/SingleContent';
 import { MainLayout } from './components/Layout';
 import { useGetCurrentContent } from './recoil/currentContent';
@@ -30,7 +30,7 @@ function App() {
           <SingleContent
             key={content.id}
             id={content.id}
-            url={content.link}
+            url={content.link as URL}
             sx={{
               display: content.id === currentContent.id ? 'inherit' : 'none',
             }}

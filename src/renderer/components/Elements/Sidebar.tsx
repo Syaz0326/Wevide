@@ -14,7 +14,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { getIconUrl } from '@Common/utils/icon';
 import { theme } from '@/providers/theme';
 import { useCurrentContent } from '@/recoil/currentContent';
-import { Content } from '@/../src-common/types';
+import { Content } from '@Common/types';
 
 export const SMALL_WIDTH = '64px';
 export const EXPANDED_WIDTH = '240px';
