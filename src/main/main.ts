@@ -1,9 +1,8 @@
 import * as path from 'path';
 import { app, BrowserWindow } from 'electron';
+import { init } from '@Main/store';
 
 const isDelelopment = `${process.env.NODE_ENV}`.trim() === 'development';
-
-console.log({ isDelelopment });
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -22,6 +21,9 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
+  const store = init();
+  console.log({ store });
+
   createWindow();
 
   app.on('activate', () => {

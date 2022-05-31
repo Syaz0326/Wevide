@@ -22,6 +22,6 @@
       "@Common/*": ["./common/*"]
     }
   },
-  "include": ["src/renderer"],
+  "include": ["src/renderer", "src/common", "src/main"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
