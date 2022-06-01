@@ -1,6 +1,6 @@
 import * as path from 'path';
-import { app, BrowserWindow } from 'electron';
-import { init } from '@Main/store';
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { init, readStore } from '@Main/store';
 
 const isDelelopment = `${process.env.NODE_ENV}`.trim() === 'development';
 
@@ -10,6 +10,7 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       webviewTag: true,
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
 
@@ -21,8 +22,7 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
-  const store = init();
-  console.log({ store });
+  init();
 
   createWindow();
 
@@ -37,4 +37,9 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+ipcMain.handle('get-contents', () => {
+  const store = readStore();
+  return store.contents;
 });

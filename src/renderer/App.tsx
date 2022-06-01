@@ -4,6 +4,16 @@ import { SingleContent } from './components/Contents/SingleContent';
 import { MainLayout } from './components/Layout';
 import { useGetCurrentContent } from './recoil/currentContent';
 
+declare global {
+  interface Window {
+    myAPI: MyAPI;
+  }
+}
+
+export interface MyAPI {
+  getContents: () => Promise<Content[]>;
+}
+
 function App() {
   const currentContent = useGetCurrentContent();
   const contentList = useRef<Content[]>([]);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Drawer,
   List,
@@ -52,22 +52,6 @@ const closedMixin: CSSObject = {
   }),
 };
 
-// Sample
-const Items: Content[] = [
-  {
-    id: '1',
-    type: 'SINGLE',
-    title: 'Google',
-    link: new URL('https://www.google.com'),
-  },
-  {
-    id: '2',
-    type: 'SINGLE',
-    title: 'Yahoo',
-    link: new URL('https://www.yahoo.co.jp'),
-  },
-];
-
 export type SidebarProps = {
   open: boolean;
   onToggleOpen: () => void;
@@ -75,6 +59,30 @@ export type SidebarProps = {
 export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
   const [currentContent, setCurrentContent] = useCurrentContent();
   const handleClick = (content: Content) => () => setCurrentContent(content);
+
+  const [items, setItems] = useState<Content[]>([]);
+
+  useEffect(() => {
+    const f = async () => {
+      const result = await window.myAPI.getContents();
+
+      setItems(
+        result.map((c) => {
+          if (c.type === 'SINGLE') {
+            return {
+              ...c,
+              link: new URL(c.link),
+            };
+          }
+          return {
+            ...c,
+            link: c.link.map((l) => new URL(l)),
+          };
+        })
+      );
+    };
+    f();
+  }, []);
 
   return (
     <Drawer
@@ -123,7 +131,7 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
             </ListItemIcon>
           </ListItemButton>
         </ListItem>
-        {Items.map((item) => (
+        {items.map((item) => (
           <ListItem
             key={item.id}
             sx={{

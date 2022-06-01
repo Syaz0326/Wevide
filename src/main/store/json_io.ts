@@ -46,7 +46,6 @@ export const writeStore = (store: Store): Store => {
 };
 
 export const init = (): Store => {
-  console.log('init');
   const exists = fs.existsSync(STORE_PATH);
   if (exists) return readStore();
   writeStore(initStore);
