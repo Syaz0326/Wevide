@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Content } from '@Common/types';
+import { Store } from '@Main/store';
 import { SingleContent } from './components/Contents/SingleContent';
 import { MainLayout } from './components/Layout';
 import { useGetCurrentContent } from './recoil/currentContent';
@@ -12,6 +13,7 @@ declare global {
 
 export interface MyAPI {
   getContents: () => Promise<Content[]>;
+  getColortheme: () => Promise<Store['settings']['mode']>;
 }
 
 function App() {

@@ -6,18 +6,20 @@ import {
   ListItemButton as ListItemButtonOriginal,
   ListItemIcon as ListItemIconOriginal,
   ListItemText,
+  createTheme,
+  useTheme,
 } from '@mui/material';
-import grey from '@mui/material/colors/grey';
 import { styled, CSSObject } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { getIconUrl } from '@Common/utils/icon';
-import { theme } from '@Renderer/providers/theme';
 import { useCurrentContent } from '@Renderer/recoil/currentContent';
 import { Content } from '@Common/types';
 
 export const SMALL_WIDTH = '64px';
 export const EXPANDED_WIDTH = '240px';
+
+const { transitions } = createTheme();
 
 const ListItem = styled(ListItemOriginal)`
   padding: 8px 0;
@@ -37,18 +39,18 @@ const ListItemIcon = styled(ListItemIconOriginal)`
 
 const opendMixin: CSSObject = {
   width: EXPANDED_WIDTH,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
+  transition: transitions.create('width', {
+    easing: transitions.easing.sharp,
+    duration: transitions.duration.enteringScreen,
   }),
   overflowY: 'hidden',
 };
 
 const closedMixin: CSSObject = {
   width: SMALL_WIDTH,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+  transition: transitions.create('width', {
+    easing: transitions.easing.sharp,
+    duration: transitions.duration.leavingScreen,
   }),
 };
 
@@ -59,6 +61,8 @@ export type SidebarProps = {
 export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
   const [currentContent, setCurrentContent] = useCurrentContent();
   const handleClick = (content: Content) => () => setCurrentContent(content);
+
+  const theme = useTheme();
 
   const [items, setItems] = useState<Content[]>([]);
 
@@ -136,7 +140,7 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
             key={item.id}
             sx={{
               backgroundColor:
-                item.id === currentContent.id ? grey[300] : 'inherit',
+                item.id === currentContent.id ? theme.color.hover : 'inherit',
             }}
           >
             <ListItemButton onClick={handleClick(item)}>

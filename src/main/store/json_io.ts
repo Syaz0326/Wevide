@@ -4,10 +4,10 @@ import { Content } from '@Common/types';
 
 const STORE_PATH = path.join(__dirname, '../store.json');
 
-type Store = {
+export type Store = {
   contents: Content[];
   settings: {
-    mode: 'dark' | 'light';
+    mode: 'dark' | 'light' | 'system';
   };
 };
 
@@ -27,7 +27,7 @@ const initStore: Store = {
     },
   ],
   settings: {
-    mode: 'light',
+    mode: 'system',
   },
 };
 

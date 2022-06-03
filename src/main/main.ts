@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron';
 import { init, readStore } from '@Main/store';
 
 const isDelelopment = `${process.env.NODE_ENV}`.trim() === 'development';
@@ -42,4 +42,13 @@ app.on('window-all-closed', () => {
 ipcMain.handle('get-contents', () => {
   const store = readStore();
   return store.contents;
+});
+
+ipcMain.handle('get-colortheme', () => {
+  const { settings } = readStore();
+  const { mode } = settings;
+  if (mode === 'system') {
+    return nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+  }
+  return mode;
 });

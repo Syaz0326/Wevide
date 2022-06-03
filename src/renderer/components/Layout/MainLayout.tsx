@@ -1,7 +1,8 @@
 import React, { ReactNode, useState } from 'react';
-import { Box, CSSObject } from '@mui/material';
-import { theme } from '@Renderer/providers/theme';
+import { Box, createTheme, CSSObject } from '@mui/material';
 import { EXPANDED_WIDTH, Sidebar, SMALL_WIDTH } from '../Elements';
+
+const theme = createTheme();
 
 const opendMixin: CSSObject = {
   marginLeft: EXPANDED_WIDTH,
