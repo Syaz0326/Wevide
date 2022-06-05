@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
   createTheme,
   ThemeProvider as ThemeProviderOriginal,
@@ -42,7 +42,18 @@ export type ThemeProviderProps = {
   children: ReactNode;
 };
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const { mode } = useGetSettings();
+  const { mode: modeSettings } = useGetSettings();
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    if (modeSettings === 'system') {
+      window.myAPI.getColortheme().then((colorTheme) => {
+        setMode(colorTheme);
+      });
+    } else {
+      setMode(modeSettings);
+    }
+  }, [modeSettings]);
 
   return (
     <ThemeProviderOriginal theme={mode === 'dark' ? darkTheme : lightTheme}>

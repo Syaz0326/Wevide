@@ -4,11 +4,11 @@ import { Store } from './store';
 contextBridge.exposeInMainWorld('myAPI', {
   getContents: async (): Promise<Store['contents']> =>
     ipcRenderer.invoke('get-contents'),
-  getColortheme: async (): Promise<Store['settings']['mode']> => {
-    const result: Store['settings'] = await ipcRenderer.invoke('get-settings');
-
-    return result.mode;
-  },
+  getColortheme: async (): Promise<'light' | 'dark'> =>
+    ipcRenderer.invoke('get-colortheme'),
   getSettings: async (): Promise<Store['settings']> =>
     ipcRenderer.invoke('get-settings'),
+  setSettings: async (
+    settings: Store['settings']
+  ): Promise<Store['settings']> => ipcRenderer.invoke('set-settings', settings),
 });

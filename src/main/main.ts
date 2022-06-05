@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron';
-import { init, readStore } from '@Main/store';
+import { Store, init, readStore, writeStore } from '@Main/store';
 
 const isDelelopment = `${process.env.NODE_ENV}`.trim() === 'development';
 
@@ -44,14 +44,27 @@ ipcMain.handle('get-contents', () => {
   return store.contents;
 });
 
-ipcMain.handle('get-settings', () => {
+ipcMain.handle('get-colortheme', () => {
   const { settings } = readStore();
 
   if (settings.mode === 'system') {
-    return {
-      ...settings,
-      mode: nativeTheme.shouldUseDarkColors ? 'dark' : 'light',
-    };
+    return nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
   }
+  return settings.mode;
+});
+
+ipcMain.handle('get-settings', () => {
+  const { settings } = readStore();
+
+  return settings;
+});
+
+ipcMain.handle('set-settings', (_, settings: Store['settings']) => {
+  const store = readStore();
+  writeStore({
+    contents: store.contents,
+    settings,
+  });
+
   return settings;
 });

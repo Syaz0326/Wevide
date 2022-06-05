@@ -13,8 +13,25 @@ const settingsState = atom<Store['settings']>({
   default: initSettings,
 });
 
-export const useSettings = () => useRecoilState(settingsState);
+export const useSettings = () => {
+  const [settings, setSettings] = useRecoilState(settingsState);
+
+  return [
+    settings,
+    (settingsProps: Store['settings']) => {
+      const newSettings = window.myAPI.setSettings(settingsProps);
+      newSettings.then((s) => setSettings(s));
+    },
+  ] as const;
+};
 
 export const useGetSettings = () => useRecoilValue(settingsState);
 
-export const useSetSettings = () => useSetRecoilState(settingsState);
+export const useSetSettings = () => {
+  const setSettings = useSetRecoilState(settingsState);
+
+  return (settings: Store['settings']) => {
+    const newSettings = window.myAPI.setSettings(settings);
+    newSettings.then((s) => setSettings(s));
+  };
+};
