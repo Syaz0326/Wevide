@@ -44,11 +44,14 @@ ipcMain.handle('get-contents', () => {
   return store.contents;
 });
 
-ipcMain.handle('get-colortheme', () => {
+ipcMain.handle('get-settings', () => {
   const { settings } = readStore();
-  const { mode } = settings;
-  if (mode === 'system') {
-    return nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+
+  if (settings.mode === 'system') {
+    return {
+      ...settings,
+      mode: nativeTheme.shouldUseDarkColors ? 'dark' : 'light',
+    };
   }
-  return mode;
+  return settings;
 });

@@ -1,10 +1,10 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import {
   createTheme,
   ThemeProvider as ThemeProviderOriginal,
 } from '@mui/material';
 import grey from '@mui/material/colors/grey';
-import { Store } from '@Main/store';
+import { useGetSettings } from '@Renderer/recoil/settings';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -42,15 +42,7 @@ export type ThemeProviderProps = {
   children: ReactNode;
 };
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [mode, setMode] = useState<Store['settings']['mode']>();
-
-  useEffect(() => {
-    const f = async () => {
-      const m = await window.myAPI.getColortheme();
-      setMode(m);
-    };
-    f();
-  });
+  const { mode } = useGetSettings();
 
   return (
     <ThemeProviderOriginal theme={mode === 'dark' ? darkTheme : lightTheme}>
