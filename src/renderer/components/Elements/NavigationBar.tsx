@@ -5,12 +5,12 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { Box, IconButton, SxProps, TextField } from '@mui/material';
+import { Box, IconButton, SxProps, TextField, useTheme } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import HomeIcon from '@mui/icons-material/Home';
-import { theme } from '@Renderer/providers/theme';
+// import { theme } from '@Renderer/providers/theme';
 
 export type NavigationBarProps = {
   wv: any;
@@ -21,6 +21,7 @@ export const NavigationBar = ({ wv, homeUrl, sx }: NavigationBarProps) => {
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
+  const theme = useTheme();
 
   useEffect(() => {
     if (wv.current.addEventListener === undefined) return () => {};

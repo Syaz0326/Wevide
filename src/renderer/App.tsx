@@ -1,8 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Content } from '@Common/types';
+import { Store } from '@Main/store';
 import { SingleContent } from './components/Contents/SingleContent';
 import { MainLayout } from './components/Layout';
 import { useGetCurrentContent } from './recoil/currentContent';
+
+declare global {
+  interface Window {
+    myAPI: MyAPI;
+  }
+}
+
+export interface MyAPI {
+  getContents: () => Promise<Store['contents']>;
+  setContents: (contents: Store['contents']) => Promise<Store['contents']>;
+  getColortheme: () => Promise<'light' | 'dark'>;
+  getSettings: () => Promise<Store['settings']>;
+  setSettings: (settings: Store['settings']) => Promise<Store['settings']>;
+}
 
 function App() {
   const currentContent = useGetCurrentContent();

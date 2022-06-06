@@ -1,9 +1,8 @@
 import * as path from 'path';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron';
+import { Store, init, readStore, writeStore } from '@Main/store';
 
 const isDelelopment = `${process.env.NODE_ENV}`.trim() === 'development';
-
-console.log({ isDelelopment });
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -11,6 +10,7 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       webviewTag: true,
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
 
@@ -22,6 +22,8 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
+  init();
+
   createWindow();
 
   app.on('activate', () => {
@@ -35,4 +37,45 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+ipcMain.handle('get-contents', () => {
+  const store = readStore();
+  return store.contents;
+});
+
+ipcMain.handle('set-contents', (_, contents: Store['contents']) => {
+  const store = readStore();
+
+  writeStore({
+    contents,
+    settings: store.settings,
+  });
+
+  return contents;
+});
+
+ipcMain.handle('get-colortheme', () => {
+  const { settings } = readStore();
+
+  if (settings.mode === 'system') {
+    return nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+  }
+  return settings.mode;
+});
+
+ipcMain.handle('get-settings', () => {
+  const { settings } = readStore();
+
+  return settings;
+});
+
+ipcMain.handle('set-settings', (_, settings: Store['settings']) => {
+  const store = readStore();
+  writeStore({
+    contents: store.contents,
+    settings,
+  });
+
+  return settings;
 });

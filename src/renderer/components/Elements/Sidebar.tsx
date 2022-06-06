@@ -6,18 +6,21 @@ import {
   ListItemButton as ListItemButtonOriginal,
   ListItemIcon as ListItemIconOriginal,
   ListItemText,
+  createTheme,
+  useTheme,
 } from '@mui/material';
-import grey from '@mui/material/colors/grey';
 import { styled, CSSObject } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { getIconUrl } from '@Common/utils/icon';
-import { theme } from '@Renderer/providers/theme';
 import { useCurrentContent } from '@Renderer/recoil/currentContent';
 import { Content } from '@Common/types';
+import { useContents } from '@Renderer/recoil/contents';
 
 export const SMALL_WIDTH = '64px';
 export const EXPANDED_WIDTH = '240px';
+
+const { transitions } = createTheme();
 
 const ListItem = styled(ListItemOriginal)`
   padding: 8px 0;
@@ -37,36 +40,20 @@ const ListItemIcon = styled(ListItemIconOriginal)`
 
 const opendMixin: CSSObject = {
   width: EXPANDED_WIDTH,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
+  transition: transitions.create('width', {
+    easing: transitions.easing.sharp,
+    duration: transitions.duration.enteringScreen,
   }),
   overflowY: 'hidden',
 };
 
 const closedMixin: CSSObject = {
   width: SMALL_WIDTH,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+  transition: transitions.create('width', {
+    easing: transitions.easing.sharp,
+    duration: transitions.duration.leavingScreen,
   }),
 };
-
-// Sample
-const Items: Content[] = [
-  {
-    id: '1',
-    type: 'SINGLE',
-    title: 'Google',
-    link: new URL('https://www.google.com'),
-  },
-  {
-    id: '2',
-    type: 'SINGLE',
-    title: 'Yahoo',
-    link: new URL('https://www.yahoo.co.jp'),
-  },
-];
 
 export type SidebarProps = {
   open: boolean;
@@ -75,6 +62,10 @@ export type SidebarProps = {
 export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
   const [currentContent, setCurrentContent] = useCurrentContent();
   const handleClick = (content: Content) => () => setCurrentContent(content);
+
+  const theme = useTheme();
+
+  const [items, setItems] = useContents();
 
   return (
     <Drawer
@@ -123,12 +114,12 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
             </ListItemIcon>
           </ListItemButton>
         </ListItem>
-        {Items.map((item) => (
+        {items.map((item) => (
           <ListItem
             key={item.id}
             sx={{
               backgroundColor:
-                item.id === currentContent.id ? grey[300] : 'inherit',
+                item.id === currentContent.id ? theme.color.hover : 'inherit',
             }}
           >
             <ListItemButton onClick={handleClick(item)}>
@@ -151,6 +142,23 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem>
+          <ListItemButton
+            onClick={() => {
+              setItems([
+                ...items,
+                {
+                  id: '3',
+                  type: 'SINGLE',
+                  title: 'Twitter',
+                  link: new URL('https://twitter.com'),
+                },
+              ]);
+            }}
+          >
+            <ListItemText primary="追加" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

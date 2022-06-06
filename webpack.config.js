@@ -3,9 +3,12 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   target: 'electron-main',
-  entry: path.join(__dirname, './src/main/main.ts'),
+  entry: {
+    main: path.join(__dirname, './src/main/main.ts'),
+    preload: path.join(__dirname, './src/main/preload.ts'),
+  },
   output: {
-    filename: 'main.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist/main'),
   },
   resolve: {
