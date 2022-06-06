@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Drawer,
   List,
@@ -15,6 +15,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { getIconUrl } from '@Common/utils/icon';
 import { useCurrentContent } from '@Renderer/recoil/currentContent';
 import { Content } from '@Common/types';
+import { useContents } from '@Renderer/recoil/contents';
 
 export const SMALL_WIDTH = '64px';
 export const EXPANDED_WIDTH = '240px';
@@ -64,29 +65,7 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
 
   const theme = useTheme();
 
-  const [items, setItems] = useState<Content[]>([]);
-
-  useEffect(() => {
-    const f = async () => {
-      const result = await window.myAPI.getContents();
-
-      setItems(
-        result.map((c) => {
-          if (c.type === 'SINGLE') {
-            return {
-              ...c,
-              link: new URL(c.link),
-            };
-          }
-          return {
-            ...c,
-            link: c.link.map((l) => new URL(l)),
-          };
-        })
-      );
-    };
-    f();
-  }, []);
+  const [items, setItems] = useContents();
 
   return (
     <Drawer
@@ -163,6 +142,23 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem>
+          <ListItemButton
+            onClick={() => {
+              setItems([
+                ...items,
+                {
+                  id: '3',
+                  type: 'SINGLE',
+                  title: 'Twitter',
+                  link: new URL('https://twitter.com'),
+                },
+              ]);
+            }}
+          >
+            <ListItemText primary="追加" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

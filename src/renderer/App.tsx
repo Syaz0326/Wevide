@@ -13,6 +13,7 @@ declare global {
 
 export interface MyAPI {
   getContents: () => Promise<Store['contents']>;
+  setContents: (contents: Store['contents']) => Promise<Store['contents']>;
   getColortheme: () => Promise<'light' | 'dark'>;
   getSettings: () => Promise<Store['settings']>;
   setSettings: (settings: Store['settings']) => Promise<Store['settings']>;

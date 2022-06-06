@@ -44,6 +44,17 @@ ipcMain.handle('get-contents', () => {
   return store.contents;
 });
 
+ipcMain.handle('set-contents', (_, contents: Store['contents']) => {
+  const store = readStore();
+
+  writeStore({
+    contents,
+    settings: store.settings,
+  });
+
+  return contents;
+});
+
 ipcMain.handle('get-colortheme', () => {
   const { settings } = readStore();
 

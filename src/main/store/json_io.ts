@@ -1,11 +1,11 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { Content } from '@Common/types';
+import { APIContent } from '@Common/types';
 
 const STORE_PATH = path.join(__dirname, '../store.json');
 
 export type Store = {
-  contents: Content[];
+  contents: APIContent[];
   settings: {
     mode: 'dark' | 'light' | 'system';
   };
@@ -17,13 +17,13 @@ const initStore: Store = {
       id: '1',
       type: 'SINGLE',
       title: 'Google',
-      link: new URL('https://www.google.com'),
+      link: 'https://www.google.com',
     },
     {
       id: '2',
       type: 'SINGLE',
       title: 'Yahoo',
-      link: new URL('https://www.yahoo.co.jp'),
+      link: 'https://www.yahoo.co.jp',
     },
   ],
   settings: {
