@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Drawer,
   List,
@@ -12,10 +12,12 @@ import {
 import { styled, CSSObject } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { getIconUrl } from '@Common/utils/icon';
 import { useCurrentContent } from '@Renderer/recoil/currentContent';
 import { Content } from '@Common/types';
 import { useContents } from '@Renderer/recoil/contents';
+import { SettingsDialog } from '../Dialog/SettingsDialog';
 
 export const SMALL_WIDTH = '64px';
 export const EXPANDED_WIDTH = '240px';
@@ -23,11 +25,11 @@ export const EXPANDED_WIDTH = '240px';
 const { transitions } = createTheme();
 
 const ListItem = styled(ListItemOriginal)`
-  padding: 8px 0;
+  padding: 0px 0;
 `;
 
 const ListItemButton = styled(ListItemButtonOriginal)`
-  padding: 0;
+  padding: 8px 0;
   margin: 0;
 `;
 const ListItemIcon = styled(ListItemIconOriginal)`
@@ -65,101 +67,108 @@ export const Sidebar = ({ open, onToggleOpen }: SidebarProps) => {
 
   const theme = useTheme();
 
-  const [items, setItems] = useContents();
+  const [items] = useContents();
+
+  const [openSettings, setOpenSettings] = useState(false);
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+  };
 
   return (
-    <Drawer
-      variant="persistent"
-      open
-      sx={{
-        ...(open ? opendMixin : closedMixin),
-        '& .MuiDrawer-paper': {
-          ...(open ? opendMixin : closedMixin),
-        },
-      }}
-    >
-      <List
+    <>
+      <Drawer
+        variant="persistent"
+        open
         sx={{
-          p: 0,
-        }}
-      >
-        <ListItem
-          disablePadding
-          sx={{
+          ...(open ? opendMixin : closedMixin),
+          '& .MuiDrawer-paper': {
             display: 'flex',
             flexDirection: 'column',
-            alignItems: open ? 'flex-end' : 'inherit',
+            justifyContent: 'space-between',
+            ...(open ? opendMixin : closedMixin),
+          },
+        }}
+      >
+        <List
+          sx={{
+            p: 0,
           }}
         >
-          <ListItemButton
-            onClick={onToggleOpen}
-            sx={{
-              maxWidth: SMALL_WIDTH,
-            }}
-          >
-            <ListItemIcon>
-              {open ? (
-                <ChevronLeftIcon
-                  sx={{
-                    fontSize: '32px',
-                  }}
-                />
-              ) : (
-                <MenuIcon
-                  sx={{
-                    fontSize: '32px',
-                  }}
-                />
-              )}
-            </ListItemIcon>
-          </ListItemButton>
-        </ListItem>
-        {items.map((item) => (
           <ListItem
-            key={item.id}
+            disablePadding
             sx={{
-              backgroundColor:
-                item.id === currentContent.id ? theme.color.hover : 'inherit',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: open ? 'flex-end' : 'inherit',
             }}
           >
-            <ListItemButton onClick={handleClick(item)}>
+            <ListItemButton
+              onClick={onToggleOpen}
+              sx={{
+                maxWidth: SMALL_WIDTH,
+              }}
+            >
               <ListItemIcon>
-                <img
-                  src={
-                    typeof item.iconUrl === 'string'
-                      ? item.iconUrl
-                      : item.iconUrl?.href ??
-                        (item.type === 'SINGLE'
-                          ? getIconUrl(item.link.hostname)
-                          : getIconUrl(item.link[0].hostname))
-                  }
-                  alt={item.title}
-                  width={32}
-                  height={32}
-                />
+                {open ? (
+                  <ChevronLeftIcon
+                    sx={{
+                      fontSize: '32px',
+                    }}
+                  />
+                ) : (
+                  <MenuIcon
+                    sx={{
+                      fontSize: '32px',
+                    }}
+                  />
+                )}
               </ListItemIcon>
-              {open && <ListItemText primary={item.title} />}
             </ListItemButton>
           </ListItem>
-        ))}
-        <ListItem>
-          <ListItemButton
-            onClick={() => {
-              setItems([
-                ...items,
-                {
-                  id: '3',
-                  type: 'SINGLE',
-                  title: 'Twitter',
-                  link: new URL('https://twitter.com'),
-                },
-              ]);
-            }}
-          >
-            <ListItemText primary="追加" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </Drawer>
+          {items.map((item) => (
+            <ListItem
+              key={item.id}
+              sx={{
+                backgroundColor:
+                  item.id === currentContent.id ? theme.color.hover : 'inherit',
+              }}
+            >
+              <ListItemButton onClick={handleClick(item)}>
+                <ListItemIcon>
+                  <img
+                    src={
+                      typeof item.iconUrl === 'string'
+                        ? item.iconUrl
+                        : item.iconUrl?.href ??
+                          (item.type === 'SINGLE'
+                            ? getIconUrl(item.link.hostname)
+                            : getIconUrl(item.link[0].hostname))
+                    }
+                    alt={item.title}
+                    width={32}
+                    height={32}
+                  />
+                </ListItemIcon>
+                {open && <ListItemText primary={item.title} />}
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <List>
+          <ListItem>
+            <ListItemButton onClick={handleOpenSettings}>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              {open && <ListItemText primary="設定" />}
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Drawer>
+      <SettingsDialog open={openSettings} onClose={handleCloseSettings} />
+    </>
   );
 };
